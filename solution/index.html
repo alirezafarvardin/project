@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolutionMaster Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f4f6f7;
+            --container-bg: #ffffff;
+            --text-color: #34495e;
+            --border-color: #dce4e8;
+            --success-color: #27ae60;
+            --info-color: #2980b9;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --header-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --input-bg-color: #ffffff;
+            --input-text-color: #333;
+            --font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.07);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode {
+            --primary-color: #34495e;
+            --secondary-color: #5dade2;
+            --background-color: #1c2833;
+            --container-bg: #283747;
+            --text-color: #eaeded;
+            --border-color: #566573;
+            --input-bg-color: #566573;
+            --input-text-color: #ffffff;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes floatUp {
+              from { opacity: 0; transform: translateY(20px); }
+              to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .invalid-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: background-color 0.4s ease, transform 0.3s ease, filter 0.3s ease;
+            animation: floatUp 0.6s ease-out;
+        }
+
+        .container.content-blur {
+            filter: blur(4px);
+            transition: filter 0.3s ease-in-out;
+            pointer-events: none;
+        }
+
+        header {
+            background-color: var(--info-color);
+            color: var(--header-text-color);
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        
+        header h1 { 
+            margin: 0; 
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            font-size: 2.2em;
+        }
+        header p { margin: 5px 0 0; opacity: 0.9; }
+        .creator { 
+            font-size: 1.1em; 
+            margin-top: 15px; 
+            color: var(--header-text-color); 
+            opacity: 0.85;
+        }
+        
+        #theme-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            font-size: 1.4em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        #theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1) rotate(15deg);
+        }
+        
+        .calculate-btn, .print-btn, .show-formula-btn {
+             background: var(--secondary-color);
+             color: var(--button-text-color);
+             border: none;
+             border-radius: 6px;
+             padding: 8px 15px;
+             cursor: pointer;
+             font-family: var(--font-family);
+             font-size: 0.9em;
+             transition: all 0.3s ease;
+             box-shadow: var(--shadow-sm);
+        }
+        
+        .calculate-btn:hover, .print-btn:hover, .show-formula-btn:hover {
+             background-color: var(--info-color);
+             transform: translateY(-2px);
+             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .calculate-btn:active, .print-btn:active, .show-formula-btn:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        nav { display: flex; flex-wrap: wrap; background-color: var(--primary-color); }
+        nav button {
+            flex-grow: 1; 
+            padding: 15px 10px; 
+            background-color: transparent;
+            border: none; 
+            color: white; 
+            cursor: pointer; 
+            font-size: 0.9em;
+            font-family: var(--font-family); 
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+        
+        nav button:hover:not(.active) { 
+            opacity: 1;
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        nav button.active { 
+            background-color: transparent;
+            opacity: 1;
+            font-weight: 700;
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
+        }
+
+        main { padding: 25px; }
+        
+        .calculator { display: none; }
+        .calculator.active { 
+            display: grid; 
+            gap: 20px; 
+            animation: fadeIn 0.5s ease-out; 
+        }
+
+        /* چیدمان‌های چند ستونی */
+        #molarity, #percent, #ppm, #buffer {
+            grid-template-columns: 1fr 1fr;
+        }
+        #molality, #dilution {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        
+        .calc-title { grid-column: 1 / -1; margin-bottom: 5px; text-align:center; }
+        .tab-subtitle { 
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .form-group { margin-bottom: 10px; position: relative; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid var(--border-color);
+            border-radius: 6px; font-size: 1em; box-sizing: border-box;
+            background-color: var(--input-bg-color);
+            color: var(--input-text-color);
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--secondary-color) 25%, transparent);
+        }
+
+        ::placeholder {
+            font-family: var(--font-family);
+            opacity: 0.6;
+            transition: opacity 0.3s ease-in-out;
+        }
+        input:focus::placeholder, select:focus::placeholder {
+          opacity: 0;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.85em;
+            margin-top: 5px;
+            animation: fadeIn 0.3s;
+        }
+
+        .tooltip-container { display: inline-block; position: relative; cursor: help; }
+        .tooltip-icon {
+            font-size: 0.8em; color: var(--secondary-color); border: 1px solid var(--secondary-color);
+            border-radius: 50%; width: 16px; height: 16px; display: inline-flex;
+            justify-content: center; align-items: center; margin-right: 5px;
+        }
+        .tooltip-text {
+            visibility: hidden; width: 220px; background-color: #555; color: #fff; text-align: center;
+            border-radius: 6px; padding: 8px; position: absolute; z-index: 1; bottom: 125%;
+            left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease;
+            font-size: 0.9em; font-weight: normal; transform: translateY(5px);
+        }
+        .tooltip-text::after {
+            content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+            border-width: 5px; border-style: solid; border-color: #555 transparent transparent transparent;
+        }
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible; opacity: 1; transform: translateY(0);
+        }
+        
+        .calculate-btn {
+            grid-column: 1 / -1; width: 100%; padding: 15px;
+            font-size: 1.2em; font-weight: bold;
+        }
+        
+        .result-section {
+            grid-column: 1 / -1; margin-top: 15px; display: none; animation: fadeIn 0.5s;
+        }
+        .result, .protocol {
+            padding: 20px; border-radius: 8px; text-align: center; font-size: 1.1em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .result:hover, .protocol:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-md);
+        }
+        .result {
+            background-color: color-mix(in srgb, var(--success-color) 20%, transparent);
+            border: 1px solid var(--success-color); font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .result span { color: var(--success-color); font-size: 1.2em; }
+        
+        .protocol {
+            background-color: color-mix(in srgb, var(--info-color) 15%, transparent);
+            border: 1px solid var(--info-color); text-align: right;
+            position: relative;
+        }
+        .protocol h3 { margin-top: 0; color: var(--info-color); }
+        .protocol ol { padding-right: 20px; }
+        .protocol li { margin-bottom: 10px; line-height: 1.6; }
+        .warning { border-right: 5px solid var(--warning-color); padding: 10px; background-color: color-mix(in srgb, var(--warning-color) 15%, transparent); margin-bottom: 10px; border-radius: 4px; }
+        
+        .print-btn { position: absolute; top: 15px; left: 15px; }
+        .show-formula-btn { width: 100%; padding: 12px; margin-top: 20px; font-size: 1em; background-color: var(--primary-color); }
+        .show-formula-btn:hover { background-color: var(--text-color); }
+        
+        .modal-container {
+            display: none; position: fixed; z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            align-items: center; justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .modal-container.show { 
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: var(--container-bg);
+            padding: 25px; border-radius: 12px;
+            position: relative;
+            width: 90%; max-width: 550px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            animation: scaleIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .modal-content .close-btn {
+            position: absolute; top: 10px; left: 15px;
+            font-size: 32px; font-weight: bold;
+            color: var(--text-color); cursor: pointer;
+            border: none; background: none; transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .modal-content .close-btn:hover {
+            transform: rotate(90deg);
+            color: var(--danger-color);
+        }
+
+        .formula-title { color: var(--secondary-color); text-align: center; }
+        .formula-box {
+            background-color: var(--background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: right;
+        }
+        #formula-details-content h4, .formula-box h4 { margin-top: 0; }
+        .formula-equation {
+            font-family: 'Courier New', monospace; font-size: 1.1em;
+            direction: ltr; text-align: center; padding: 10px; word-wrap: break-word;
+            background-color: color-mix(in srgb, var(--primary-color) 10%, transparent);
+            border-radius: 5px;
+        }
+        .formula-step {
+            direction: ltr; text-align: left; padding: 8px; margin: 5px 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+        .formula-step:last-child { border-bottom: none; }
+        .formula-step strong { color: var(--success-color); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <button id="theme-toggle">🌓</button>
+            <h1>SolutionMaster Pro</h1>
+            <p>نرم‌افزار جامع و هوشمند تهیه محلول‌های آزمایشگاهی</p>
+            <p class="creator">سازندگان: تورج مساحی (دانشجوی دکتری تخصصی مهندسی بهداشت محیط)</p>
+            <p class="creator" style="margin-top: 5px;">دکتر هوشیار حسینی (هیئت علمی دانشگاه علوم پزشکی کرمانشاه)</p>
+        </header>
+
+        <nav>
+            <button class="tab-btn active" onclick="showTab(event, 'molarity')">مولاریته</button>
+            <button class="tab-btn" onclick="showTab(event, 'molality')">مولالیته</button>
+            <button class="tab-btn" onclick="showTab(event, 'percent')">درصد وزنی</button>
+            <button class="tab-btn" onclick="showTab(event, 'ppm')">PPM/PPB</button>
+            <button class="tab-btn" onclick="showTab(event, 'dilution')">رقیق‌سازی</button>
+            <button class="tab-btn" onclick="showTab(event, 'buffer')">طراحی بافر</button>
+        </nav>
+
+        <main>
+            <div id="molarity" class="calculator active"></div>
+            <div id="molality" class="calculator"></div>
+            <div id="percent" class="calculator"></div>
+            <div id="ppm" class="calculator"></div>
+            <div id="dilution" class="calculator"></div>
+            <div id="buffer" class="calculator"></div>
+        </main>
+    </div>
+
+    <div id="formula-modal" class="modal-container">
+        <div class="modal-content">
+            <button class="close-btn" id="close-formula-btn">&times;</button>
+            <div id="formula-details-content">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GLOBAL VARIABLES ---
+        let lastCalculationDetails = {};
+
+        // --- DATABASES ---
+        const chemicalDatabase = {
+            'Sodium Chloride (NaCl)': { mw: 58.44 }, 'Potassium Chloride (KCl)': { mw: 74.55 }, 'Sodium Hydroxide (NaOH)': { mw: 40.00 }, 'Hydrochloric Acid (HCl)': { mw: 36.46 }, 'Sulfuric Acid (H₂SO₄)': { mw: 98.08 }, 'Nitric Acid (HNO₃)': { mw: 63.01 }, 'Acetic Acid (CH₃COOH)': { mw: 60.05 }, 'Ammonium Hydroxide (NH₄OH)': { mw: 35.04 }, 'Sucrose (C₁₂H₂₂O₁₁)': { mw: 342.30 }, 'Glucose (C₆H₁₂O₆)': { mw: 180.16 }, 'Fructose (C₆H₁₂O₆)': { mw: 180.16 }, 'Ethanol (C₂H₅OH)': { mw: 46.07 }, 'Methanol (CH₃OH)': { mw: 32.04 }, 'Isopropanol (C₃H₈O)': { mw: 60.10 }, 'Calcium Chloride (CaCl₂)': { mw: 110.98 }, 'Magnesium Sulfate (MgSO₄)': { mw: 120.37 }, 'Sodium Carbonate (Na₂CO₃)': { mw: 105.99 }, 'Sodium Bicarbonate (NaHCO₃)': { mw: 84.01 }, 'Potassium Permanganate (KMnO₄)': { mw: 158.03 }, 'Copper(II) Sulfate (CuSO₄)': { mw: 159.61 }, 'Tris': { mw: 121.14 }, 'HEPES': { mw: 238.30 }, 'PIPES': { mw: 302.37 }, 'MOPS': { mw: 209.26 }, 'EDTA': { mw: 292.24 }, 'Glycerol (C₃H₈O₃)': { mw: 92.09 }, 'Urea (CH₄N₂O)': { mw: 60.06 }, 'Boric Acid (H₃BO₃)': { mw: 61.83 }, 'Citric Acid (C₆H₈O₇)': { mw: 192.12 }, 'Sodium Acetate (CH₃COONa)': { mw: 82.03 }, 'Ammonium Sulfate ((NH₄)₂SO₄)': { mw: 132.14 }, 'Silver Nitrate (AgNO₃)': { mw: 169.87 }, 'Zinc Sulfate (ZnSO₄)': { mw: 161.47 }, 'Glycine (C₂H₅NO₂)': { mw: 75.07 }, 'Triton X-100': { mw: 646.86 }, 'SDS (Sodium Dodecyl Sulfate)': { mw: 288.38 }, 'Tween 20': { mw: 1227.54 }
+        };
+
+        const bufferDatabase = {
+              'Acetate': { pka: 4.76, acid_mw: 60.05, base_mw: 82.03, acid_name: 'Acetic Acid', base_name: 'Sodium Acetate' }, 'Citrate': {pka: 4.76, acid_mw: 192.12, base_mw: 258.07, acid_name: 'Citric Acid', base_name: 'Sodium Citrate'}, 'Phosphate': { pka: 7.2, acid_mw: 136.09, base_mw: 141.96, acid_name: 'NaH₂PO₄', base_name: 'Na₂HPO₄'}, 'HEPES': { pka: 7.5, acid_mw: 238.30, base_mw: 260.29, acid_name: 'HEPES Acid', base_name: 'HEPES Sodium'}, 'Tris': { pka: 8.1, acid_mw: 157.59, base_mw: 121.14, acid_name: 'Tris-HCl', base_name: 'Tris Base' }
+        };
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+            populateAllCalculators();
+        };
+        
+        // --- UI LOGIC ---
+        function showTab(event, tabId) {
+            document.querySelectorAll('.calculator').forEach(calc => calc.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        });
+
+        const formulaModal = document.getElementById('formula-modal');
+        document.getElementById('close-formula-btn').addEventListener('click', () => {
+            formulaModal.classList.remove('show');
+            document.querySelector('.container').classList.remove('content-blur');
+        });
+        formulaModal.addEventListener('click', (e) => { 
+            if (e.target === formulaModal) {
+                formulaModal.classList.remove('show');
+                document.querySelector('.container').classList.remove('content-blur');
+            }
+        });
+
+        function showFormulaModal() {
+            const { title, formulaHTML, steps } = lastCalculationDetails;
+            const contentEl = document.getElementById('formula-details-content');
+            if (!title) return;
+
+            document.querySelector('.container').classList.add('content-blur');
+
+            let stepsHTML = steps.map(step => `<p class="formula-step">${step}</p>`).join('');
+
+            contentEl.innerHTML = `<h3 class="formula-title">${title}</h3><div class="formula-box"><h4>فرمول اصلی:</h4><p class="formula-equation">${formulaHTML}</p></div><div class="formula-box"><h4>مراحل محاسبه:</h4>${stepsHTML}</div>`;
+            formulaModal.classList.add('show');
+        }
+        
+        document.body.addEventListener('input', (e) => {
+            if (e.target.id === 'molarity-chemical') {
+                const chemicalName = e.target.value;
+                const chemical = chemicalDatabase[chemicalName];
+                document.getElementById('molarity-mw').value = chemical ? chemical.mw : '';
+            }
+        });
+        document.body.addEventListener('change', (e) => {
+            if (e.target.id === 'buffer-select') document.getElementById('buffer-pka-value').textContent = bufferDatabase[e.target.value].pka;
+        });
+
+        function displayResult(sectionId, resultHTML, protocolHTML = '') {
+            const section = document.getElementById(sectionId);
+            let finalHTML = `<div class="result">${resultHTML}</div>`;
+            if (protocolHTML) {
+                finalHTML += `<div class="protocol">${protocolHTML}</div>`;
+            }
+            finalHTML += `<button class="show-formula-btn" onclick="showFormulaModal()">نمایش فرمول و محاسبات 📝</button>`;
+            section.innerHTML = finalHTML;
+            section.style.display = 'block';
+        }
+        
+        // --- POPULATION & HELPER FUNCTIONS ---
+        function populateAllCalculators() {
+            const sections = {
+                molarity: {
+                    title: 'محاسبه جرم برای غلظت مولار', subtitle: 'Molarity Calculator',
+                    html: `<div class="form-group"><label for="molarity-chemical">ماده شیمیایی:</label><input type="text" id="molarity-chemical" list="chemicals"><datalist id="chemicals"></datalist></div><div class="form-group"><label for="molarity-mw">جرم مولی (g/mol):</label><input type="text" inputmode="decimal" id="molarity-mw" placeholder="خودکار تکمیل می‌شود"></div><div class="form-group"><label for="molarity-concentration">غلظت نهایی (mol/L):</label><input type="text" inputmode="decimal" id="molarity-concentration" placeholder="مثلاً 0.5"></div><div class="form-group"><label for="molarity-volume">حجم نهایی (mL):</label><input type="text" inputmode="decimal" id="molarity-volume" placeholder="مثلاً 500"></div>`,
+                    button: `<button class="calculate-btn" onclick="calculateMolarity()">محاسبه جرم</button>`
+                },
+                molality: {
+                    title: 'محاسبه جرم برای غلظت مولال', subtitle: 'Molality Calculator',
+                    html: `<div class="form-group"><label for="molality-mw">جرم مولی حل‌شونده (g/mol):</label><input type="text" inputmode="decimal" id="molality-mw" placeholder="مثلاً 58.44"></div><div class="form-group"><label for="molality-concentration">غلظت نهایی (mol/kg): <span class="tooltip-container"><span class="tooltip-icon">❓</span><span class="tooltip-text">مولالیته تعداد مول‌های ماده حل‌شده در هر کیلوگرم از حلال است.</span></span></label><input type="text" inputmode="decimal" id="molality-concentration" placeholder="مثلاً 0.1"></div><div class="form-group"><label for="molality-solvent-mass">جرم حلال (g):</label><input type="text" inputmode="decimal" id="molality-solvent-mass" placeholder="مثلاً 1000"></div>`,
+                    button: `<button class="calculate-btn" onclick="calculateMolality()">محاسبه جرم</button>`
+                },
+                percent: {
+                    title: 'محاسبه غلظت درصدی (w/w)', subtitle: 'Percent by Weight Calculator',
+                    html: `<div class="form-group"><label for="percent-solute-mass">جرم ماده حل‌شونده (g):</label><input type="text" inputmode="decimal" id="percent-solute-mass" placeholder="مثلاً 10"></div><div class="form-group"><label for="percent-solvent-mass">جرم حلال (g):</label><input type="text" inputmode="decimal" id="percent-solvent-mass" placeholder="مثلاً 90"></div>`,
+                    button: `<button class="calculate-btn" onclick="calculatePercent()">محاسبه درصد</button>`
+                },
+                ppm: {
+                    title: 'محاسبه PPM و PPB', subtitle: 'PPM/PPB Calculator',
+                    html: `<div class="form-group"><label for="ppm-solute-mass">جرم حل‌شونده (mg):</label><input type="text" inputmode="decimal" id="ppm-solute-mass" placeholder="مثلاً 5"></div><div class="form-group"><label for="ppm-solution-volume">حجم محلول (L):</label><input type="text" inputmode="decimal" id="ppm-solution-volume" placeholder="مثلاً 1"></div>`,
+                    button: `<button class="calculate-btn" onclick="calculatePPM()">محاسبه</button>`
+                },
+                dilution: {
+                    title: 'محاسبه رقیق‌سازی (C₁V₁ = C₂V₂)', subtitle: 'Dilution Calculator',
+                    html: `<div class="form-group"><label for="dilution-c1">غلظت محلول استوک (C₁):</label><input type="text" inputmode="decimal" id="dilution-c1" placeholder="مثلاً 10"></div><div class="form-group"><label for="dilution-v2">حجم نهایی (V₂):</label><input type="text" inputmode="decimal" id="dilution-v2" placeholder="مثلاً 1000"></div><div class="form-group"><label for="dilution-c2">غلظت نهایی (C₂):</label><input type="text" inputmode="decimal" id="dilution-c2" placeholder="مثلاً 0.2"></div>`,
+                    button: `<button class="calculate-btn" onclick="calculateDilution()">محاسبه حجم استوک</button>`
+                },
+                buffer: {
+                    title: 'طراحی بافر', subtitle: 'Buffer Designer',
+                    html: `<div class="form-group"><label for="buffer-select">انتخاب بافر:</label><select id="buffer-select"></select></div><div class="form-group"><label for="buffer-ph">pH نهایی:</label><input type="text" inputmode="decimal" id="buffer-ph" placeholder="مثلاً 7.4"></div><p style="text-align: center; grid-column: 1 / -1; margin: -10px 0 0 0; font-weight: bold;">pKa: <span id="buffer-pka-value"></span> <span class="tooltip-container"><span class="tooltip-icon">❓</span><span class="tooltip-text">pKa لگاریتم منفی ثابت تفکیک اسید (Ka) است. این مقدار نشان‌دهنده قدرت یک اسید می‌باشد.</span></span></p><div class="form-group"><label for="buffer-concentration">غلظت نهایی بافر (M):</label><input type="text" inputmode="decimal" id="buffer-concentration" placeholder="مثلاً 0.1"></div><div class="form-group"><label for="buffer-volume">حجم نهایی (mL):</label><input type="text" inputmode="decimal" id="buffer-volume" placeholder="مثلاً 1000"></div>`,
+                    button: `<button class="calculate-btn" onclick="calculateBuffer()">محاسبه اجزاء</button>`
+                }
+            };
+            for (const key in sections) {
+                const el = document.getElementById(key);
+                el.innerHTML = `<h2 class="calc-title">${sections[key].title}</h2><p class="tab-subtitle">${sections[key].subtitle}</p>${sections[key].html}${sections[key].button}<div class="result-section" id="${key}-result-section"></div>`;
+            }
+            const datalist = document.getElementById('chemicals');
+            Object.keys(chemicalDatabase).forEach(key => datalist.innerHTML += `<option value="${key}">`);
+            const bufferSelect = document.getElementById('buffer-select');
+            Object.keys(bufferDatabase).forEach(key => bufferSelect.innerHTML += `<option value="${key}">${key}</option>`);
+            bufferSelect.dispatchEvent(new Event('change'));
+        }
+        
+        function triggerShake(elementId){const el=document.getElementById(elementId);el&&(el.classList.add("invalid-shake"),setTimeout(()=>el.classList.remove("invalid-shake"),500))}
+        function showError(inputId,message){const inputElement=document.getElementById(inputId);if(!inputElement)return;const parentGroup=inputElement.closest(".form-group"),existingError=parentGroup.querySelector(".error-message");existingError&&existingError.remove();const errorDiv=document.createElement("div");errorDiv.className="error-message",errorDiv.textContent=message,parentGroup.appendChild(errorDiv)}
+        function clearErrors(calculatorId){document.getElementById(calculatorId).querySelectorAll(".error-message").forEach(el=>el.remove())}
+        function printFullReport(){const resultSectionNode=document.querySelector(".calculator.active .result-section");if(!resultSectionNode)return;const contentToPrint=resultSectionNode.cloneNode(!0);contentToPrint.querySelector(".print-btn")?.remove(),contentToPrint.querySelector(".show-formula-btn")?.remove();let inputsHTML="";if(lastCalculationDetails.inputs){inputsHTML+='<h3>مقادیر ورودی</h3><table class="print-table">',inputsHTML+="<thead><tr><th>پارامتر</th><th>مقدار</th></tr></thead><tbody>";for(const key in lastCalculationDetails.inputs)inputsHTML+=`<tr><td>${key}</td><td>${lastCalculationDetails.inputs[key]}</td></tr>`;inputsHTML+="</tbody></table>"}let calculationsHTML="";const{title:title,formulaHTML:formulaHTML,steps:steps}=lastCalculationDetails;if(title){let stepsHTML=steps.map(step=>`<p class="formula-step">${step}</p>`).join("");calculationsHTML=`\n                    <h3 class="formula-title">${title}</h3>\n                    <div class="formula-box">\n                        <h4>فرمول اصلی:</h4>\n                        <p class="formula-equation">${formulaHTML}</p>\n                    </div>\n                    <div class="formula-box">\n                        <h4>مراحل محاسبه:</h4>\n                        ${stepsHTML}\n                    </div>\n                `}const headerHTML=`\n                <div class='print-header'>\n                    <h2>گزارش محاسبه SolutionMaster Pro</h2>\n                    <p>تاریخ و زمان: ${new Date().toLocaleString("fa-IR")}</p>\n                </div>\n            `,printWindow=window.open("","","height=800,width=800");printWindow.document.write('<html><head><title>چاپ گزارش کامل</title>'),printWindow.document.write('\n                <style>\n                    body { font-family: \'Vazirmatn\', Tahoma, sans-serif; direction: rtl; padding: 25px; color: #333; }\n                    .print-header { text-align: center; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 20px; }\n                    h3 { color: #2980b9; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 25px;}\n                    .print-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }\n                    .print-table th, .print-table td { border: 1px solid #ddd; padding: 10px; text-align: right; }\n                    .print-table th { background-color: #f2f2f2; }\n                    .result { padding: 15px; text-align: center; font-size: 1.1em; background-color: #eafaf1; border: 1px solid #27ae60; border-radius: 5px; margin-top: 10px; }\n                    .protocol { padding: 15px; border: 1px solid #2980b9; background-color: #eaf2f8; border-radius: 5px; text-align: right; }\n                    .formula-box { background-color: #f4f6f7; border: 1px solid #dce4e8; border-radius: 8px; padding: 15px; margin-top: 15px; text-align: right; }\n                    .formula-equation { font-family: \'Courier New\', monospace; font-size: 1.1em; direction: ltr; text-align: center; padding: 10px; word-wrap: break-word; }\n                    .formula-step { direction: ltr; text-align: left; padding: 8px; margin: 5px 0; border-bottom: 1px dashed #dce4e8; font-family: \'Consolas\', monospace; }\n                    @media print { body { -webkit-print-color-adjust: exact; } }\n                </style>\n            '),printWindow.document.write("</head><body>"),printWindow.document.write(headerHTML),printWindow.document.write(inputsHTML);const resultDiv=contentToPrint.querySelector(".result"),protocolDiv=contentToPrint.querySelector(".protocol");resultDiv&&printWindow.document.write("<h3>نتیجه نهایی</h3>"+resultDiv.outerHTML),protocolDiv&&printWindow.document.write(protocolDiv.outerHTML),printWindow.document.write("<h3>جزئیات محاسبه</h3>"+calculationsHTML),printWindow.document.write("</body></html>"),printWindow.document.close(),printWindow.print()}
+        function calculateMolarity(){clearErrors("molarity");let e=!0;const t=parseFloat(document.getElementById("molarity-mw").value),o=parseFloat(document.getElementById("molarity-concentration").value),a=parseFloat(document.getElementById("molarity-volume").value);(isNaN(t)||t<=0)&&(showError("molarity-mw","جرم مولی باید یک عدد مثبت باشد."),triggerShake("molarity-mw"),e=!1),(isNaN(o)||o<0)&&(showError("molarity-concentration","غلظت نمی‌تواند منفی باشد."),triggerShake("molarity-concentration"),e=!1),(isNaN(a)||a<=0)&&(showError("molarity-volume","حجم باید یک عدد مثبت باشد."),triggerShake("molarity-volume"),e=!1);if(!e)return;const l=o*(a/1e3)*t;lastCalculationDetails={title:"جزئیات محاسبه مولاریته",formulaHTML:"Mass (g) = Concentration (mol/L) &times; Volume (L) &times; MW (g/mol)",steps:[`Volume (L) = ${a} mL &divide; 1000 = ${a/1e3} L`,`Mass = ${o} mol/L &times; ${a/1e3} L &times; ${t} g/mol`,`<strong>Mass = ${l.toFixed(4)} g</strong>`],inputs:{"ماده شیمیایی":document.getElementById("molarity-chemical").value||"نامشخص","جرم مولی (g/mol)":t,"غلظت نهایی (mol/L)":o,"حجم نهایی (mL)":a}};const c=document.getElementById("molarity-chemical").value||"ماده",n=`<button class="print-btn" onclick="printFullReport()">چاپ</button><h3>پروتکل ساخت محلول</h3><p class="warning"><strong>احتیاط:</strong> همیشه از تجهیزات حفاظت فردی (PPE) مناسب مانند عینک ایمنی، روپوش آزمایشگاهی و دستکش استفاده کنید.</p><ol><li><strong>آماده‌سازی:</strong> از تمیز بودن تمام شیشه‌آلات اطمینان حاصل کنید. یک بالن ژوژه (حجمی) با حجم <strong>${a} میلی‌لیتر</strong> انتخاب کنید.</li><li><strong>وزن‌کشی دقیق:</strong> مقدار <strong>${l.toFixed(4)} گرم</strong> از <strong>${c}</strong> را با استفاده از ترازوی دقیق (ترجیحاً با دقت 3 یا 4 رقم اعشار) بر روی کاغذ توزین یا در یک بشر کوچک وزن کنید.</li><li><strong>انحلال اولیه:</strong> ماده وزن شده را به یک بشر تمیز منتقل کنید. حدود 50-70% از حجم نهایی حلال (مثلاً آب مقطر) را به بشر اضافه کرده و با استفاده از همزن مغناطیسی یا شیشه‌ای، آن را به طور کامل حل کنید.</li><li><strong>انتقال به بالن:</strong> پس از انحلال کامل، محلول را با دقت به بالن ژوژه <strong>${a} میلی‌لیتری</strong> منتقل کنید. برای اطمینان از انتقال تمام ماده، بشر را چندین بار با مقدار کمی حلال شستشو داده و آب شستشو را نیز به بالن اضافه کنید.</li><li><strong>به حجم رساندن:</strong> با استفاده از یک پیپت پاستور یا قطره‌چکان، حلال را به آرامی به بالن اضافه کنید تا سطح پایین منیسک مایع دقیقاً روی خط نشانه بالن قرار گیرد.</li><li><strong>مخلوط کردن نهایی:</strong> درب بالن را محکم ببندید و آن را حداقل 10-15 بار به آرامی سر و ته کنید تا محلول کاملاً یکنواخت و همگن شود.</li><li><strong>برچسب‌گذاری:</strong> ظرف حاوی محلول را با نام ماده، غلظت (${o} M)، تاریخ تهیه و نام خود برچسب‌گذاری کنید.</li></ol>`;displayResult("molarity-result-section",`جرم مورد نیاز: <span>${l.toFixed(4)} گرم</span>`,n)}
+        function calculateMolality(){clearErrors("molality");let e=!0;const t=parseFloat(document.getElementById("molality-mw").value),o=parseFloat(document.getElementById("molality-concentration").value),a=parseFloat(document.getElementById("molality-solvent-mass").value);(isNaN(t)||t<=0)&&(showError("molality-mw","جرم مولی باید یک عدد مثبت باشد."),triggerShake("molality-mw"),e=!1),(isNaN(o)||o<0)&&(showError("molality-concentration","غلظت نمی‌تواند منفی باشد."),triggerShake("molality-concentration"),e=!1),(isNaN(a)||a<=0)&&(showError("molality-solvent-mass","جرم حلال باید یک عدد مثبت باشد."),triggerShake("molality-solvent-mass"),e=!1);if(!e)return;const l=o*(a/1e3)*t;lastCalculationDetails={title:"جزئیات محاسبه مولالیته",formulaHTML:"Mass (g) = Molality (mol/kg) &times; Solvent Mass (kg) &times; MW (g/mol)",steps:[`Solvent Mass (kg) = ${a} g &divide; 1000 = ${a/1e3} kg`,`Mass = ${o} mol/kg &times; ${a/1e3} kg &times; ${t} g/mol`,`<strong>Mass = ${l.toFixed(4)} g</strong>`],inputs:{"جرم مولی حل‌شونده (g/mol)":t,"غلظت نهایی (mol/kg)":o,"جرم حلال (g)":a}};const c=`<button class="print-btn" onclick="printFullReport()">چاپ</button><h3>پروتکل ساخت محلول</h3><p class="warning"><strong>نکته مهم:</strong> مولالیته بر اساس کیلوگرم <strong>حلال</strong> است، نه حجم کل محلول.</p><ol><li><strong>توزین حلال:</strong> یک ظرف تمیز (مانند بشر) را روی ترازو قرار داده و آن را صفر کنید (Tare). سپس دقیقاً <strong>${a} گرم</strong> از حلال مورد نظر را در آن وزن کنید.</li><li><strong>توزین حل‌شونده:</strong> به طور جداگانه، مقدار <strong>${l.toFixed(4)} گرم</strong> از ماده حل‌شونده را با دقت وزن کنید.</li><li><strong>انحلال:</strong> ماده حل‌شونده را به ظرف حاوی حلال اضافه کرده و تا انحلال کامل آن را هم بزنید.</li><li><strong>برچسب‌گذاری:</strong> ظرف را با نام ماده، غلظت (${o} m)، تاریخ و نام خود برچسب‌گذاری کنید.</li></ol>`;displayResult("molality-result-section",`جرم مورد نیاز حل‌شونده: <span>${l.toFixed(4)} گرم</span>`,c)}
+        function calculatePercent(){clearErrors("percent");let e=!0;const t=parseFloat(document.getElementById("percent-solute-mass").value),o=parseFloat(document.getElementById("percent-solvent-mass").value);(isNaN(t)||t<0)&&(showError("percent-solute-mass","جرم حل‌شونده باید یک عدد معتبر باشد."),triggerShake("percent-solute-mass"),e=!1),(isNaN(o)||o<0)&&(showError("percent-solvent-mass","جرم حلال باید یک عدد معتبر باشد."),triggerShake("percent-solvent-mass"),e=!1);if(!e)return;const a=t+o;if(a<=0)return showError("percent-solute-mass","جرم کل نمی‌تواند صفر یا منفی باشد."),triggerShake("percent-solute-mass"),void triggerShake("percent-solvent-mass");const l=t/a*100;lastCalculationDetails={title:"جزئیات محاسبه درصد وزنی (w/w)",formulaHTML:"% (w/w) = [Solute Mass (g) &divide; Total Mass (g)] &times; 100",steps:[`Total Mass = ${t} g + ${o} g = ${a.toFixed(3)} g`,`% (w/w) = (${t} g &divide; ${a.toFixed(3)} g) &times; 100`,`<strong>% (w/w) = ${l.toFixed(2)}</strong>`],inputs:{"جرم ماده حل‌شونده (g)":t,"جرم حلال (g)":o}};const c=`<button class="print-btn" onclick="printFullReport()">چاپ</button><h3>پروتکل ساخت محلول</h3><ol><li>مقدار <strong>${t.toFixed(3)} گرم</strong> از ماده حل‌شونده را با دقت وزن کنید.</li><li>مقدار <strong>${o.toFixed(3)} گرم</strong> از حلال را وزن کنید.</li><li>حل‌شونده را در حلال ریخته و تا انحلال کامل مخلوط کنید. جرم کل محلول شما <strong>${a.toFixed(3)} گرم</strong> خواهد بود.</li></ol>`;displayResult("percent-result-section",`غلظت درصد وزنی: <span>${l.toFixed(2)} % (w/w)</span>`,c)}
+        function calculatePPM(){clearErrors("ppm");let e=!0;const t=parseFloat(document.getElementById("ppm-solute-mass").value),o=parseFloat(document.getElementById("ppm-solution-volume").value);(isNaN(t)||t<0)&&(showError("ppm-solute-mass","جرم باید یک عدد معتبر باشد."),triggerShake("ppm-solute-mass"),e=!1),(isNaN(o)||o<=0)&&(showError("ppm-solution-volume","حجم باید یک عدد مثبت باشد."),triggerShake("ppm-solution-volume"),e=!1);if(!e)return;const a=t/o,l=1e3*a;lastCalculationDetails={title:"جزئیات محاسبه PPM و PPB",formulaHTML:"PPM (mg/L) = Solute Mass (mg) &divide; Solution Volume (L)",steps:[`PPM = ${t} mg &divide; ${o} L = ${a.toFixed(2)} ppm`,`PPB = ${a.toFixed(2)} ppm &times; 1000 = ${l.toFixed(2)} ppb`],inputs:{"جرم حل‌شونده (mg)":t,"حجم محلول (L)":o}};const c=`<button class="print-btn" onclick="printFullReport()">چاپ</button><h3>توضیحات و پروتکل</h3><p>غلظت PPM (Parts Per Million) برای محلول‌های آبی معمولاً معادل <strong>میلی‌گرم بر لیتر (mg/L)</strong> در نظر گرفته می‌شود. PPB (Parts Per Billion) نیز معادل <strong>میکروگرم بر لیتر (µg/L)</strong> است.</p><ol><li>مقدار <strong>${t} میلی‌گرم</strong> از ماده حل‌شونده را با دقت وزن کنید.</li><li>آن را در مقداری از حلال حل کرده و سپس به یک بالن ژوژه با حجم نهایی <strong>${1e3*o} میلی‌لیتر</strong> منتقل کنید.</li><li>بالن را با حلال به خط نشانه رسانده و به خوبی مخلوط کنید تا محلول همگن شود.</li></ol>`;displayResult("ppm-result-section",`غلظت: <span>${a.toFixed(2)} ppm</span> (mg/L)یا <span>${l.toFixed(2)} ppb</span> (µg/L)`,c)}
+        function calculateDilution(){clearErrors("dilution");let e=!0;const t=parseFloat(document.getElementById("dilution-c1").value),o=parseFloat(document.getElementById("dilution-c2").value),a=parseFloat(document.getElementById("dilution-v2").value);(isNaN(t)||t<=0)&&(showError("dilution-c1","غلظت استوک باید یک عدد مثبت باشد."),triggerShake("dilution-c1"),e=!1),(isNaN(o)||o<0)&&(showError("dilution-c2","غلظت نهایی باید یک عدد معتبر باشد."),triggerShake("dilution-c2"),e=!1),(isNaN(a)||a<=0)&&(showError("dilution-v2","حجم نهایی باید یک عدد مثبت باشد."),triggerShake("dilution-v2"),e=!1),e&&o>t&&(showError("dilution-c2","غلظت نهایی نمی‌تواند بیشتر از غلظت استوک باشد."),triggerShake("dilution-c2"),e=!1);if(!e)return;const l=o*a/t,c=a-l;lastCalculationDetails={title:"جزئیات محاسبه رقیق‌سازی",formulaHTML:"C₁ &times; V₁ = C₂ &times; V₂ &rArr; V₁ = (C₂ &times; V₂) &divide; C₁",steps:[`V₁ = (${o} &times; ${a}) &divide; ${t}`,`<strong>V₁ = ${l.toFixed(3)} mL</strong>`],inputs:{"غلظت محلول استوک (C₁)":t,"غلظت نهایی (C₂)":o,"حجم نهایی (V₂)":a}};const n=`<button class="print-btn" onclick="printFullReport()">چاپ</button><h3>پروتکل رقیق‌سازی</h3><p class="warning"><strong>احتیاط:</strong> هنگام کار با اسیدها و بازهای غلیظ بسیار مراقب باشید. <strong>همیشه اسید را به آب اضافه کنید، نه برعکس.</strong></p><ol><li><strong>آماده‌سازی:</strong> یک بالن ژوژه تمیز با حجم <strong>${a} میلی‌لیتر</strong> آماده کنید.</li><li><strong>برداشت استوک:</strong> با استفاده از یک پیپت حجمی (برای دقت بالا) یا استوانه مدرج، مقدار <strong>${l.toFixed(3)} میلی‌لیتر</strong> از محلول استوک (با غلظت ${t}) را بردارید.</li><li><strong>انتقال و رقیق‌سازی:</strong> حجم برداشته شده از استوک را به بالن ژوژه منتقل کنید. سپس با حلال مناسب (مانند آب مقطر) حجم را به آرامی به خط نشانه برسانید. (تقریباً به <strong>${c.toFixed(3)} میلی‌لیتر</strong> حلال نیاز دارید).</li><li><strong>مخلوط کردن:</strong> درب بالن را بسته و آن را چندین بار سر و ته کنید تا محلول کاملاً یکنواخت شود.</li><li><strong>برچسب‌گذاری:</strong> ظرف را با نام ماده، غلظت نهایی (${o})، تاریخ و نام خود برچسب‌گذاری کنید.</li></ol>`;displayResult("dilution-result-section",`حجم مورد نیاز از استوک (V₁): <span>${l.toFixed(3)} mL</span>`,n)}
+        function calculateBuffer(){clearErrors("buffer");let e=!0;const t=bufferDatabase[document.getElementById("buffer-select").value],o=t.pka,a=parseFloat(document.getElementById("buffer-ph").value),l=parseFloat(document.getElementById("buffer-concentration").value),c=parseFloat(document.getElementById("buffer-volume").value);isNaN(a)&&(showError("buffer-ph","مقدار pH معتبر نیست."),triggerShake("buffer-ph"),e=!1),(isNaN(l)||l<=0)&&(showError("buffer-concentration","غلظت باید یک عدد مثبت باشد."),triggerShake("buffer-concentration"),e=!1),(isNaN(c)||c<=0)&&(showError("buffer-volume","حجم باید یک عدد مثبت باشد."),triggerShake("buffer-volume"),e=!1);if(!e)return;const n=Math.pow(10,a-o),r=l/(n+1),i=l-r,s=r*(c/1e3)*t.acid_mw,d=i*(c/1e3)*t.base_mw;lastCalculationDetails={title:"جزئیات محاسبه بافر (هندرسون-هاسلبالخ)",formulaHTML:"pH = pKa + log([A⁻]/[HA])",steps:[`[A⁻]/[HA] = 10^(pH - pKa) = 10^(${a} - ${o}) = ${n.toFixed(3)}`,`[HA] = Total Conc. &divide; (Ratio + 1) = ${l} &divide; (${n.toFixed(3)} + 1) = ${r.toFixed(4)} M`,`[A⁻] = Total Conc. - [HA] = ${l} - ${r.toFixed(4)} = ${i.toFixed(4)} M`,`Acid Mass = ${r.toFixed(4)} M &times; ${c/1e3} L &times; ${t.acid_mw} g/mol = <strong>${s.toFixed(4)} g</strong>`,`Base Mass = ${i.toFixed(4)} M &times; ${c/1e3} L &times; ${t.base_mw} g/mol = <strong>${d.toFixed(4)} g</strong>`],inputs:{"بافر انتخابی":document.getElementById("buffer-select").value,pKa:o,"pH نهایی":a,"غلظت نهایی بافر (M)":l,"حجم نهایی (mL)":c}};let u="";Math.abs(a-o)>1&&(u=`<p class="warning"><strong>هشدار:</strong> pH هدف (${a}) خارج از محدوده بافری مؤثر (pKa ± 1) است. این بافر ممکن است ظرفیت مناسبی در این pH نداشته باشد.</p>`);const m=`جزء اسیدی (${t.acid_name}): <span>${s.toFixed(4)} گرم</span>جزء بازی (${t.base_name}): <span>${d.toFixed(4)} گرم</span>`,g=`<button class="print-btn" onclick="printFullReport()">چاپ</button><h3>پروتکل ساخت بافر</h3>${u}<ol><li><strong>توزین اجزا:</strong> مقدار <strong>${s.toFixed(4)} گرم</strong> از ${t.acid_name} و <strong>${d.toFixed(4)} گرم</strong> از ${t.base_name} را با دقت وزن کنید.</li><li><strong>انحلال اولیه:</strong> هر دو جزء را در یک بشر حاوی حدود 80% از حجم نهایی حلال (مثلاً ${.8*c} میلی‌لیتر آب دیونیزه) حل کنید. از همزن مغناطیسی برای انحلال کامل استفاده کنید.</li><li><strong>تنظیم دقیق pH:</strong> پس از انحلال کامل، الکترود یک pH متر کالیبره شده را در محلول قرار دهید. در صورت نیاز، pH را با افزودن قطره قطره اسید (مانند HCl) یا باز (مانند NaOH) قوی و رقیق به مقدار هدف (${a}) برسانید.</li><li><strong>رساندن به حجم نهایی:</strong> محلول بافر را به یک بالن ژوژه <strong>${c} میلی‌لیتری</strong> منتقل کرده و با حلال به حجم نهایی برسانید.</li><li><strong>همگن‌سازی:</strong> درب بالن را بسته و آن را به خوبی مخلوط کنید. pH نهایی را مجدداً برای اطمینان بررسی کنید.</li></ol>`;displayResult("buffer-result-section",m,g)}
+    </script>
+</body>
+</html>
